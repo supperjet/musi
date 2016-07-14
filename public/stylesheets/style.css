@@ -1,0 +1,100 @@
+*{
+  padding:0;
+  margin:0;
+  box-sizing:border-box;
+}
+html,
+body{
+  height:100%;
+}
+
+body{
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  background:url("/images/bg2.jpg") no-repeat;
+  background-size: cover;
+  color:#fff;
+  text-align:center;
+}
+.top,
+.left,
+.right{
+  position:absolute;
+}
+
+.top{
+  left:10px;
+  top:10px;
+  right:10px;
+  width:20%;
+  height: 25%;
+  border:1px solid orange;
+  background: orange;
+  color: #000;
+}
+.top ul li{
+	display: inline-block;
+	width:50px;
+	height:20px;
+	line-height: 20px;
+	cursor: pointer;
+	margin-top: 20px;
+	border:1px solid #000;
+	border-radius: 4px;
+  font-size: 12px;
+}
+.top ul li.selected2{
+	background-color: #000;
+	color:orange;
+}
+.top h1{
+  margin-top:10px;
+  font-size:40px;
+  height:40px;
+  line-height: 40px;
+}
+.top p{
+  margin-top: 30px;
+  font-size:12px;
+  height:40px;
+  line-height: 40px;
+}
+.left{
+  left: 10px;
+  top: 27%;
+  bottom:10px;
+  width:20%;
+  /*border:1px solid #ffffff;*/
+  background-color: rgba(0,0,0,.9);
+}
+
+.left ul{
+  overflow: auto;
+  list-style: none;
+}
+.left ul li{
+  display: block;
+  height:30px;
+  background: #000;
+  margin-bottom:2px;
+  line-height:30px;
+  font-size: 13px;
+  font-family: Verdana;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.left ul li.selected1{
+  color:orange;
+  font-size: 15px;
+}
+.right{
+  background-color: rgba(0,0,0,1);
+  top:27%;
+  right:10px;
+  bottom:10px;
+  left:21%;
+  overflow: hidden;
+  /*border:1px solid #fff;*/
+}
