@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <title>Music DNA</title>
+  <style>
+
+    html, body {
+      padding: 0;
+      margin: 0;
+      background: #111;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #file-drop-area {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0) url('drop-a-beat.png') 50% 40% no-repeat;
+      background-size: 420px 88px;
+    }
+
+    #file-drop-area.dropped {
+      background-image: none;
+    }
+
+    #file-drop-area.dropped * {
+      display: none;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #time {
+      position: absolute;
+      top: 0;
+      height: 4px;
+      left: 0;
+      width: 1%;
+      background: #00B2B2;
+      -webkit-backface-visibility: hidden;
+    }
+
+    #artist-track {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+
+    #artist {
+      font-family: 'Roboto';
+      font-size: 27px;
+      font-weight: 300;
+      color: #FFF;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    #track {
+      font-family: 'Roboto';
+      font-size: 16px;
+      color: #00B2B2;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    #save-and-download {
+      width: 100%;
+      height: 100px;
+      position: absolute;
+      left: 0%;
+      top: 0;
+      border-bottom: 1px solid #003040;
+      background: #090909;
+      padding: 0;
+      text-align: center;
+
+      -webkit-transform: translateY(-101px);
+      -moz-transform: translateY(-101px);
+      -ms-transform: translateY(-101px);
+      -o-transform: translateY(-101px);
+      transform: translateY(-101px);
+
+      -webkit-transition: -webkit-transform 300ms ease-out;
+      -moz-transition: -moz-transform 300ms ease-out;
+      -ms-transition: -ms-transform 300ms ease-out;
+      -o-transition: -o-transform 300ms ease-out;
+      transition: transform 300ms ease-out;;
+    }
+
+    #save-and-download.visible {
+      -webkit-transform: translateY(0);
+      -moz-transform: translateY(0);
+      -ms-transform: translateY(0);
+      -o-transform: translateY(0);
+      transform: translateY(0);
+
+    }
+
+    #save-and-download h1 {
+      font-family: 'Roboto';
+      font-weight: 700;
+      font-size: 21px;
+      text-align: center;
+      line-height: 1;
+      display: block;
+      color: #FFF;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 14px 0 0 0;
+    }
+
+    #save-and-download-buttons {
+      padding-top: 13px;
+      text-align: center;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #save-and-download-buttons.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #save-and-download button,
+    #save-and-download a {
+      display: inline-block;
+      font-family: 'Roboto';
+      height: 25px;
+      padding: 0 10px;
+      line-height: 25px;
+      background: #00A3D9;
+      border-radius: 3px;
+      font-size: 13px;
+      border: none;
+      text-shadow: 0 1px 1px #004C66;
+      color: #FFF;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+
+    #save-and-download-buttons button:hover {
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #generate-progress {
+      width: 314px;
+      height: 21px;
+      padding: 1px;
+      border: 1px solid #FFF;
+      position: absolute;
+      left: 50%;
+      margin: -24px 0 0 -158px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #generate-progress.visible {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    #generate-bar {
+      height: 21px;
+      width: 0%;
+      background: #00B2B2;
+    }
+
+    #save {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+    }
+
+    #save-and-download a#get-download {
+      position: absolute;
+      bottom: 27px;
+      left: 50%;
+      width: 100px;
+      margin: 0 0 0 -60px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #save-and-download a#get-download.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #status {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      color: #FFF;
+    }
+
+    form {
+      position: absolute;
+      left: 50%;
+      top: 60%;
+      width: 600px;
+      margin-left: -300px;
+      text-align: center;
+      color: #AAA;
+      font-family: 'Roboto';
+      font-size: 16px;
+    }
+
+    form div {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="render-area"></canvas>
+  <div id="file-drop-area">
+    <div id="alternative">
+      <form id="file-chooser">
+        <p>选择一首歌</p>
+        <div>
+          <input name="source-file" id="source-file" type="file" />
+          <input type="submit" value="播放"/>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="time"></div>
+  <div id="artist-track">
+    <div id="artist"></div>
+    <div id="track"></div>
+  </div>
+
+  <div id="save-and-download">
+    <h1>Download DNA</h1>
+    <div id="save-and-download-buttons">
+      <button id="save-normal">Normal</button>
+      <button id="save-large">Large</button>
+      <button id="save-enormous">Enormous</button>
+    </div>
+    <div id="generate-progress">
+      <div id="generate-bar"></div>
+    </div>
+    <a id="get-download">Download</a>
+  </div>
+
+  <script src="id3.js"></script>
+  <script src="audio-parser.js"></script>
+  <script src="audio-renderer.js"></script>
+  <script src="audio-renderer-hi-res.js"></script>
+  <script src="music-dna.js"></script>
+  <script src="bootstrap.js"></script>
+</body>
+</html>
